@@ -1,4 +1,6 @@
+import json
 from typing import List
+from werkzeug.exceptions import BadRequest
 from src.interfaces.repositories.products_repository_interface import IProductsRepository
 from src.interfaces.repositories.session_interface import IDatabaseConnection
 from src.models.product import Product
@@ -64,22 +66,33 @@ class ProductsRepository(IProductsRepository):
             
         Returns:
             The added product with ID
+            
+        Raises:
+            ValueError: If category does not exist
         """
-        if self.db.data:
-            products = self.db.data.get('products', [])
-            
-            new_id = max([p.get('id', 0) for p in products], default=0) + 1
-            product.id = new_id
-            
-            product_dict = {
-                'id': product.id,
-                'name': product.name,
-                'category': product.category,
-                'price': product.price
-            }
-            
-            products.append(product_dict)
-            self.db.data['products'] = products            
-            return product
+        if not self.db.data:
+            return None
         
-        return None
+        products = self.db.data.get('products', [])
+        categories = self.db.data.get('categories', [])
+        
+        category_names = [cat.get('name') for cat in categories]
+        if product.category not in category_names:
+            raise BadRequest(f"Category '{product.category}' does not exist")
+        
+        new_id = max([p.get('id', 0) for p in products], default=0) + 1
+        product.id = new_id
+        
+        product_dict = {
+            'id': product.id,
+            'name': product.name,
+            'category': product.category,
+            'price': product.price
+        }
+        
+        products.append(product_dict)
+        self.db.data['products'] = products      
+
+        with open(self.db.json_file_path, 'w') as json_file:
+            json.dump(self.db.data, json_file, indent=4)  
+        return product

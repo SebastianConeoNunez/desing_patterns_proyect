@@ -495,7 +495,7 @@ def add_one(self, product: Product) -> Product:
 
 ---
 
-### Smell #5: MISSING VALIDATION
+### Smell #3: MISSING VALIDATION
 
 No se tenia una diferencia entre los valores de entrada y salida con entidades de negocio, por ende se agregaron dtos para hacer la distincion entre objetos.
 **Severidad:** 🔴 CRÍTICA
@@ -864,6 +864,41 @@ class ProductsService:
 
 ---
 
+## 🔐 VALIDACIÓN DE INTEGRIDAD REFERENCIAL
+
+### Mejora: Validación de categorías antes de persistir
+
+En la capa de repositorio, implementamos una validación crucial: **verificar que la categoría del producto existe en la tabla de categorías antes de guardarlo en la base de datos**. Esto previene la corrupción de datos y mantiene la integridad referencial.
+
+**El Problema:**
+Antes, cuando un usuario creaba un producto con una categoría inexistente, el sistema lo aceptaba sin verificación y lo guardaba directamente. Esto resultaba en productos "huérfanos" con referencias a categorías que no existían, corrompiendo la base de datos.
+
+**La Solución - Validación Centralizada en el Repositorio:**
+```python
+def add_one(self, product: Product) -> Product:
+    if not self.db.data:
+        return None
+    
+    # Extraer las categorías válidas de la BD
+    categories = self.db.data.get('categories', [])
+    category_names = [cat.get('name') for cat in categories]
+    
+    # Validar ANTES de persistir: Fail-Fast Pattern
+    if product.category not in category_names:
+        raise BadRequest(f"Category '{product.category}' does not exist")
+    
+    # Si llegamos aquí, la categoría es válida
+    # Proceder con la creación y persistencia
+    new_id = max([p.get('id', 0) for p in products], default=0) + 1
+    product.id = new_id
+    products.append(product_dict)
+    self.db.save_data(self.db.data)
+    
+    return product
+```
+
+---
+
 ## 🚀 CONCLUSIÓN
 
 Esta refactorización transforma una arquitectura desorganizada en una estructura profesional, escalable y mantenible mediante:
@@ -873,8 +908,9 @@ Esta refactorización transforma una arquitectura desorganizada en una estructur
 3. **Interfaces explícitas** - Contratos claros
 4. **Patrones de diseño** - Builder, Singleton, Repository, etc.
 5. **DTOs y Validación** - Entrada garantizada
-6. **Manejo de errores** - HTTP consistente
-7. **Estructura profesional** - Carpetas organizadas
+6. **Validación de integridad** - Restricciones de dominio en persistencia
+7. **Manejo de errores** - HTTP consistente
+8. **Estructura profesional** - Carpetas organizadas
 
 El resultado es código:
 - ✅ Más mantenible
@@ -882,9 +918,10 @@ El resultado es código:
 - ✅ Más reutilizable
 - ✅ Más escalable
 - ✅ Más profesional
+- ✅ Con datos consistentes y seguros
 
 ---
 
 **Documento compilado:** 30 de Noviembre de 2025  
 **Estado:** COMPLETO Y VERIFICADO  
-**Versión:** 2.0 (Exhaustivo)
+**Versión:** 2.1 (Con validación de integridad referencial)

@@ -143,6 +143,12 @@
             "name": "lala",
             "category": "kids",
             "price": 9.0
+        },
+        {
+            "id": 24,
+            "name": "T-Shirt",
+            "category": "men",
+            "price": 22.99
         }
     ],
     "categories": [

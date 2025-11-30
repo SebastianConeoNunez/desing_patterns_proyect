@@ -12,7 +12,23 @@ class DatabaseConnection: #todo: implementar singleton
         except FileNotFoundError:
             self.data = None
             print("Error: json file not found.")
-            
+
+    def get_products(self):
+        if self.data:
+            return self.data.get('products', [])
+        else:
+            return []
+
+    def add_product(self, new_product):
+        if self.data:
+            products = self.data.get('products', [])
+            products.append(new_product)
+            self.data['products'] = products
+            with open(self.json_file_path, 'w') as json_file:
+                json.dump(self.data, json_file, indent=4)
+        else:
+            print("Error: something went wrong adding the product")
+
     def get_categories(self):
         if self.data:
             return self.data.get('categories', [])
