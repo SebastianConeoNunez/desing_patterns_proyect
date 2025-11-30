@@ -1,6 +1,6 @@
 import json
 
-class DatabaseConnection:
+class DatabaseConnection: #todo: implementar singleton 
     def __init__(self, json_file_path):
         self.json_file_path = json_file_path
         self.data = None

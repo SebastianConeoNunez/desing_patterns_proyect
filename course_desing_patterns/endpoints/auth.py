@@ -14,3 +14,4 @@ class AuthenticationResource(Resource):
 
 
 
+#todo: pasaria esto a base de datos y utilizaria hashing para las contraseñas

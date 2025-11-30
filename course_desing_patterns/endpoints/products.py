@@ -24,7 +24,7 @@ class ProductsResource(Resource):
             return { 'message': 'Unauthorized acces token not found'}, 401
 
         if not is_valid_token(token):
-           return { 'message': 'Unauthorized invalid token'}, 401
+           return { 'message': 'Unauthorized invalid token'}, 401 #todo: manejaria esto mejor y no quemado
 
         if category_filter:
             filtered_products = [p for p in self.products if p['category'].lower() == category_filter.lower()]
