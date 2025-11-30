@@ -1,4 +1,3 @@
-import json
 from typing import List
 from src.interfaces.repositories.products_repository_interface import IProductsRepository
 from src.interfaces.repositories.session_interface import IDatabaseConnection
@@ -80,10 +79,7 @@ class ProductsRepository(IProductsRepository):
             }
             
             products.append(product_dict)
-            self.db.data['products'] = products
-            
-            self.db.save_data(self.db.data)
-            
+            self.db.data['products'] = products            
             return product
         
         return None
