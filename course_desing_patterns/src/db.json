@@ -151,5 +151,10 @@
             "name": "unisex"
         }
     ],
-    "favorites": []
+    "favorites": [
+        {
+            "user_id": 1,
+            "product_id": 20
+        }
+    ]
 }
