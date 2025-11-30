@@ -68,38 +68,59 @@ proyecto/
 ```
 course_desing_patterns/
 ├── src/
-│   ├── controllers/          # Capa de presentación
-│   │   └── products_controller.py
+│   ├── controllers/          # Capa de presentación HTTP
+│   │   ├── products_controller.py
+│   │   └── categories_controller.py  # ✅ NUEVO
+│   │
 │   ├── services/             # Capa de lógica de negocio
-│   │   └── products_service.py
+│   │   ├── products_service.py
+│   │   └── categories_service.py  # ✅ NUEVO
+│   │
 │   ├── repositories/         # Capa de acceso a datos
 │   │   ├── session.py
-│   │   └── product_repository.py
+│   │   ├── product_repository.py
+│   │   └── category_repository.py  # ✅ NUEVO
+│   │
 │   ├── models/               # Modelos de dominio
-│   │   └── product.py
+│   │   ├── product.py
+│   │   └── category.py  # ✅ NUEVO
+│   │
 │   ├── interfaces/           # Contratos (Abstracciones)
 │   │   ├── services/
-│   │   │   └── products_service_interface.py
+│   │   │   ├── products_service_interface.py
+│   │   │   └── categories_service_interface.py  # ✅ NUEVO
 │   │   └── repositories/
 │   │       ├── session_interface.py
-│   │       └── products_repository_interface.py
+│   │       ├── products_repository_interface.py
+│   │       └── categories_repository_interface.py  # ✅ NUEVO
+│   │
 │   ├── dtos/                 # Objetos de transferencia de datos
 │   │   ├── request/
-│   │   │   └── create_product_request.py
+│   │   │   ├── create_product_request.py
+│   │   │   └── category_request.py  # ✅ NUEVO
 │   │   └── response/
-│   │       └── product_response.py
+│   │       ├── product_response.py
+│   │       └── category_response.py  # ✅ NUEVO
+│   │
 │   ├── mappers/              # Mapeo de datos
-│   │   └── products_mapper.py
+│   │   ├── products_mapper.py
+│   │   └── category_mapper.py  # ✅ NUEVO
+│   │
+│   ├── configurations/       # Configuración centralizada
+│   │   └── constants.py  # ✅ NUEVO (CATEGORIES, PRODUCTS, etc)
+│   │
 │   └── app.py                # Punto de entrada
-├── db.json                   # Base de datos
-└── Pipfile                   # Dependencias
+│
+├── db.json                   # Base de datos persistente
+├── Pipfile                   # Dependencias
+└── REFLECTION.md             # Este documento
 ```
 
-**Beneficios:**
-- ✅ Estructura clara y profesional
-- ✅ Fácil de navegar
-- ✅ Separación de responsabilidades
-- ✅ Escalable para crecer
+**Evolución:**
+- ✅ Estructura escalable: cada módulo (Products, Categories) replica el patrón
+- ✅ Constantes centralizadas: una única fuente de verdad para claves de BD
+- ✅ Fácil agregar nuevos módulos (Favorites, Users, etc)
+- ✅ Convenciones consistentes aplicadas a todos los componentes
 
 ---
 
@@ -552,6 +573,39 @@ def create_product():
 
 **Beneficio:** Datos garantizados como válidos ✅
 
+
+### Smell #4: CONSTANTS
+
+Se implemento el uso de variables para mejorar la consistencia en casa uno de los endpoints
+**Severidad:** 🔴 BAJA
+
+
+```python
+def add_one(self, product: Product) -> Product:
+        """
+        Adds a new product to the database.
+        
+        Args:
+            product: Product object to add
+            
+        Returns:
+            The added product with ID
+            
+        Raises:
+            ValueError: If category does not exist
+        """
+        if not self.db.data:
+            return None
+        
+        products = self.db.data.get(PRODUCTS, [])
+        categories = self.db.data.get(CATEGORIES, [])
+
+//constants.py 
+CATEGORIES = "categories"
+PRODUCTS = "products"
+```
+
+**Beneficio:** En caso de algun cambio solo tenemos que modificar el archivo de variables ✅
 ---
 
 ## 🏗️ PATRONES DE DISEÑO IMPLEMENTADOS
@@ -909,8 +963,9 @@ Esta refactorización transforma una arquitectura desorganizada en una estructur
 4. **Patrones de diseño** - Builder, Singleton, Repository, etc.
 5. **DTOs y Validación** - Entrada garantizada
 6. **Validación de integridad** - Restricciones de dominio en persistencia
-7. **Manejo de errores** - HTTP consistente
-8. **Estructura profesional** - Carpetas organizadas
+7. **Constantes centralizadas** - Una única fuente de verdad para claves de BD
+8. **Manejo de errores** - HTTP consistente
+9. **Estructura escalable** - Patrón replicable para nuevos módulos (Products, Categories, etc.)
 
 El resultado es código:
 - ✅ Más mantenible
@@ -919,9 +974,10 @@ El resultado es código:
 - ✅ Más escalable
 - ✅ Más profesional
 - ✅ Con datos consistentes y seguros
+- ✅ Type-safe con constantes centralizadas
 
 ---
 
 **Documento compilado:** 30 de Noviembre de 2025  
 **Estado:** COMPLETO Y VERIFICADO  
-**Versión:** 2.1 (Con validación de integridad referencial)
+**Versión:** 2.2 (Con constantes y estructura multi-módulo)

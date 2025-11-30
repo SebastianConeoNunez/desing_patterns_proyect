@@ -1,6 +1,7 @@
 import json
 from typing import List
 from werkzeug.exceptions import BadRequest
+from src.configurations.constants import CATEGORIES, PRODUCTS
 from src.interfaces.repositories.products_repository_interface import IProductsRepository
 from src.interfaces.repositories.session_interface import IDatabaseConnection
 from src.models.product import Product
@@ -29,7 +30,7 @@ class ProductsRepository(IProductsRepository):
             List of mapped products, or empty list if no data exists
         """
         if self.db.data:
-            raw_products = self.db.data.get('products', [])
+            raw_products = self.db.data.get(PRODUCTS, [])
             products = list(map(ProductsMapper.map_raw_data_to_product, raw_products))
             
             if category_filter:
@@ -50,7 +51,7 @@ class ProductsRepository(IProductsRepository):
             Product object if found, None otherwise
         """
         if self.db.data:
-            raw_products = self.db.data.get('products', [])
+            raw_products = self.db.data.get(PRODUCTS, [])
             for raw_product in raw_products:
                 if raw_product.get('id') == product_id:
                     return ProductsMapper.map_raw_data_to_product(raw_product)
@@ -73,8 +74,8 @@ class ProductsRepository(IProductsRepository):
         if not self.db.data:
             return None
         
-        products = self.db.data.get('products', [])
-        categories = self.db.data.get('categories', [])
+        products = self.db.data.get(PRODUCTS, [])
+        categories = self.db.data.get(CATEGORIES, [])
         
         category_names = [cat.get('name') for cat in categories]
         if product.category not in category_names:
@@ -91,7 +92,7 @@ class ProductsRepository(IProductsRepository):
         }
         
         products.append(product_dict)
-        self.db.data['products'] = products      
+        self.db.data[PRODUCTS] = products      
 
         with open(self.db.json_file_path, 'w') as json_file:
             json.dump(self.db.data, json_file, indent=4)  

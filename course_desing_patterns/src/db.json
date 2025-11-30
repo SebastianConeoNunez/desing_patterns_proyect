@@ -131,31 +131,9 @@
             "name": "super shirt",
             "category": "kids",
             "price": 14.9
-        },
-        {
-            "id": 23,
-            "name": "lala",
-            "category": "kids",
-            "price": 9.0
-        },
-        {
-            "id": 23,
-            "name": "lala",
-            "category": "kids",
-            "price": 9.0
-        },
-        {
-            "id": 24,
-            "name": "T-Shirt",
-            "category": "men",
-            "price": 22.99
         }
     ],
     "categories": [
-        {
-            "id": 1,
-            "name": "men"
-        },
         {
             "id": 2,
             "name": "women"
@@ -167,6 +145,10 @@
         {
             "id": 4,
             "name": "girls"
+        },
+        {
+            "id": 5,
+            "name": "unisex"
         }
     ],
     "favorites": []

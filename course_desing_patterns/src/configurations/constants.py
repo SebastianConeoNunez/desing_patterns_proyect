@@ -1,0 +1,2 @@
+CATEGORIES = "categories"
+PRODUCTS = "products"
