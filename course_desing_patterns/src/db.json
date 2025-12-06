@@ -156,5 +156,55 @@
             "user_id": 1,
             "product_id": 20
         }
+    ],
+    "users": [
+        {
+            "id": 1,
+            "email": "sebastian@gmail.com",
+            "password": "$2b$12$SJPU52u1juFmEt0GI.pobeyCc9ARWTRQcNKXpvrfY.h5WBeJBif2G",
+            "name": "Sebastian Coneo",
+            "role": "customer",
+            "created_at": "2025-12-06T21:07:06.445959",
+            "updated_at": "2025-12-06T21:41:31.871572",
+            "is_active": true
+        },
+        {
+            "id": 2,
+            "email": "sebastiano@gmail.com",
+            "password": "$2b$12$Gjy00Ceu3x93dwFvKTcI/ujT9bxzAM0DKxYwYJ4jp1lrYkc.PECFS",
+            "name": "Sebastian Coneo",
+            "role": "customer",
+            "created_at": "2025-12-06T21:07:26.955320",
+            "updated_at": "2025-12-06T21:44:54.876988",
+            "is_active": false
+        },
+        {
+            "id": 3,
+            "email": "sebastianoa@hotmail.com",
+            "password": "$2b$12$pdRwTXU.aWecyMdPUrGW/.AjasGPD5lQj8q9zlIOJRJHXdyzU2KJC",
+            "name": "Sebastian",
+            "role": "customer",
+            "created_at": "2025-12-06T21:14:45.538440",
+            "updated_at": null,
+            "is_active": true
+        },
+        {
+            "id": 4,
+            "email": "sebastianoa@hoatmail.com",
+            "password": "$2b$12$hyHGlbazFhR/qHElEtJpr.F5kvkLEA8yMEJY95f5otmhfHVp4g3di",
+            "name": "Sebastian",
+            "role": "customer",
+            "created_at": "2025-12-06T21:15:12.760139",
+            "updated_at": null,
+            "is_active": true
+        }
+    ],
+    "audits": [
+        {
+            "id": 1,
+            "user_id": 1,
+            "action": "login",
+            "timestamp": "2025-12-06T21:07:06.500123"
+        }
     ]
 }

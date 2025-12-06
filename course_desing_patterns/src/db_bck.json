@@ -151,5 +151,16 @@
             "name": "girls"
         }
     ],
-    "favorites": []
+    "favorites": [],
+    "users": [
+        {
+            "id": 1,
+            "name": "administrator",
+            "email": "admin@mgmail.com",
+            "password": "admin123",
+            "role": "admin",
+            "created_at": "2023-10-01T12:00:00",
+            "updated_at": "2023-10-01T12:00:00",
+            "is_active": true        }
+    ]
 }

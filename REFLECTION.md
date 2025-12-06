@@ -8,7 +8,7 @@
 
 ---
 
-## 📋 TABLA DE CONTENIDOS
+## TABLA DE CONTENIDOS
 
 1. [Resumen Ejecutivo](#resumen-ejecutivo)
 2. [Comparación: Antes vs Después](#comparación-antes-vs-después)
@@ -22,35 +22,35 @@
 
 ---
 
-## 📊 RESUMEN EJECUTIVO
+##  RESUMEN EJECUTIVO
 
 ### Transformación de Arquitectura
 
 **ANTES:** Arquitectura monolítica, fuertemente acoplada
-- ❌ Controladores mixtos con lógica de BD
-- ❌ Autenticación quemada en el código
-- ❌ Sin separación de capas
-- ❌ Acceso directo a datos sin abstracción
-- ❌ Sin validación de entrada
-- ❌ Manejo de errores inconsistente
+-  Controladores mixtos con lógica de BD
+-  Autenticación quemada en el código
+-  Sin separación de capas
+-  Acceso directo a datos sin abstracción
+-  Sin validación de entrada
+-  Manejo de errores inconsistente
 
 **DESPUÉS:** Arquitectura profesional de tres capas
-- ✅ Separación clara: Controlador → Servicio → Repositorio
-- ✅ Inyección de dependencias configurada
-- ✅ Interfaces para todos los componentes
-- ✅ Mapeo automático de datos con Builder
-- ✅ Validación centralizada con DTOs
-- ✅ Manejo de errores HTTP consistente
-- ✅ Estructura de carpetas profesional
-- ✅ Patrones de diseño implementados
+-  Separación clara: Controlador → Servicio → Repositorio
+-  Inyección de dependencias configurada
+-  Interfaces para todos los componentes
+-  Mapeo automático de datos con Builder
+-  Validación centralizada con DTOs
+-  Manejo de errores HTTP consistente
+-  Estructura de carpetas profesional
+-  Patrones de diseño implementados
 
 ---
 
-## 🔄 COMPARACIÓN: ANTES VS DESPUÉS
+##  COMPARACIÓN: ANTES VS DESPUÉS
 
-### 1️⃣ ESTRUCTURA DE CARPETAS
+###  ESTRUCTURA DE CARPETAS
 
-#### ❌ ANTES (Desorganizado)
+####  ANTES (Desorganizado)
 ```
 proyecto/
 ├── endpoints/
@@ -64,50 +64,55 @@ proyecto/
 - Violación de separación de responsabilidades
 - Sin convenciones claras
 
-#### ✅ DESPUÉS (Profesional)
+####  DESPUÉS (Profesional)
 ```
 course_desing_patterns/
 ├── src/
 │   ├── controllers/          # Capa de presentación HTTP
 │   │   ├── products_controller.py
-│   │   └── categories_controller.py  # ✅ NUEVO
+|   |   ├── favorites_controller.py
+│   │   └── categories_controller.py  
 │   │
 │   ├── services/             # Capa de lógica de negocio
 │   │   ├── products_service.py
-│   │   └── categories_service.py  # ✅ NUEVO
+│   │   ├── favorites_service.py
+│   │   └── categories_service.py  
 │   │
 │   ├── repositories/         # Capa de acceso a datos
 │   │   ├── session.py
 │   │   ├── product_repository.py
-│   │   └── category_repository.py  # ✅ NUEVO
+│   │   ├── favorites_repository.py
+│   │   └── category_repository.py  
 │   │
 │   ├── models/               # Modelos de dominio
 │   │   ├── product.py
-│   │   └── category.py  # ✅ NUEVO
+│   │   ├── favorites.py
+│   │   └── category.py  
 │   │
 │   ├── interfaces/           # Contratos (Abstracciones)
 │   │   ├── services/
 │   │   │   ├── products_service_interface.py
-│   │   │   └── categories_service_interface.py  # ✅ NUEVO
+│   │   │   ├── favorites_service_interface.py
+│   │   │   └── categories_service_interface.py 
 │   │   └── repositories/
 │   │       ├── session_interface.py
 │   │       ├── products_repository_interface.py
-│   │       └── categories_repository_interface.py  # ✅ NUEVO
+│   │       ├── favorites_repository_interface.py
+│   │       └── categories_repository_interface.py  
 │   │
 │   ├── dtos/                 # Objetos de transferencia de datos
 │   │   ├── request/
 │   │   │   ├── create_product_request.py
-│   │   │   └── category_request.py  # ✅ NUEVO
-│   │   └── response/
-│   │       ├── product_response.py
-│   │       └── category_response.py  # ✅ NUEVO
-│   │
+│   │   │   ├── favorites_request.py
+│   │   │   └── category_request.py  
+│   │   
 │   ├── mappers/              # Mapeo de datos
 │   │   ├── products_mapper.py
-│   │   └── category_mapper.py  # ✅ NUEVO
+│   │   ├── favorites_mapper.py
+│   │   └── category_mapper.py 
 │   │
 │   ├── configurations/       # Configuración centralizada
-│   │   └── constants.py  # ✅ NUEVO (CATEGORIES, PRODUCTS, etc)
+│   │   └── constants.py  
 │   │
 │   └── app.py                # Punto de entrada
 │
@@ -117,16 +122,16 @@ course_desing_patterns/
 ```
 
 **Evolución:**
-- ✅ Estructura escalable: cada módulo (Products, Categories) replica el patrón
-- ✅ Constantes centralizadas: una única fuente de verdad para claves de BD
-- ✅ Fácil agregar nuevos módulos (Favorites, Users, etc)
-- ✅ Convenciones consistentes aplicadas a todos los componentes
+-  Estructura escalable: cada módulo (Products, Categories, Favorites) replica el patrón
+-  Constantes centralizadas: una única fuente de verdad para claves de BD
+-  Fácil agregar nuevos módulos (Favorites, Users, etc)
+-  Convenciones consistentes aplicadas a todos los componentes
 
 ---
 
-### 2️⃣ CONTROLADOR (CAPA DE PRESENTACIÓN)
+### 2️ CONTROLADOR (CAPA DE PRESENTACIÓN)
 
-#### ❌ ANTES - ProductsResource (Monolítico)
+####  ANTES - ProductsResource (Monolítico)
 No se tenia una separacion concreta entre todos lo metodos que correspendian a cada API
 
 ```python
@@ -140,11 +145,11 @@ def is_valid_token(token):
 
 class ProductsResource(Resource):
     def __init__(self):
-        # ❌ PROBLEMA 1: Acoplamiento fuerte con BD
+        #  PROBLEMA 1: Acoplamiento fuerte con BD
         self.db = DatabaseConnection('db.json')
         self.db.connect()
         
-        # ❌ PROBLEMA 2: Lógica de BD en el controlador
+        #  PROBLEMA 2: Lógica de BD en el controlador
         self.products = self.db.get_products()
         self.parser = reqparse.RequestParser()
         
@@ -153,20 +158,20 @@ class ProductsResource(Resource):
         token = request.headers.get('Authorization')
         category_filter = request.args.get('category')
       
-        # ❌ PROBLEMA 3: Autenticación quemada
+        #  PROBLEMA 3: Autenticación quemada
         if not token:
             return { 'message': 'Unauthorized acces token not found'}, 401
 
         if not is_valid_token(token):
            return { 'message': 'Unauthorized invalid token'}, 401
         
-        # ❌ PROBLEMA 4: Filtrado manual
+        #  PROBLEMA 4: Filtrado manual
         if category_filter:
             filtered_products = [p for p in self.products 
                                if p['category'].lower() == category_filter.lower()]
             return filtered_products 
         
-        # ❌ PROBLEMA 5: Búsqueda manual
+        #  PROBLEMA 5: Búsqueda manual
         if product_id is not None:
             product = next((p for p in self.products 
                           if p['id'] == product_id), None)
@@ -176,44 +181,19 @@ class ProductsResource(Resource):
                 return {'message': 'Product not found'}, 404
               
         return self.products
-
-    def post(self):
-        token = request.headers.get('Authorization')
-        parser = reqparse.RequestParser()
-        parser.add_argument('name', type=str, required=True, 
-                          help='Name of the product')
-        parser.add_argument('category', type=str, required=True, 
-                          help='Category of the product')
-        parser.add_argument('price', type=float, required=True, 
-                          help='Price of the product')
-
-        args = parser.parse_args()
-        
-        # ❌ PROBLEMA 6: ID generado de forma frágil
-        new_product = {
-            'id': len(self.products) + 1,  # Race condition
-            'name': args['name'],
-            'category': args['category'],
-            'price': args['price']
-        }
-
-        self.products.append(new_product)
-        self.db.add_product(new_product)
-        return {'mensaje': 'Product added', 'product': new_product}, 201
 ```
 
 **Problemas Identificados:**
-1. ❌ **Acoplamiento Fuerte** - Crea instancias de BD directamente
-2. ❌ **Lógica Mixta** - Filtraje y búsqueda en controlador
-3. ❌ **Autenticación Quemada** - Token hardcoded (`'abcd1234'`)
-4. ❌ **Sin Validación** - Aceptar datos sin validar
-5. ❌ **ID Frágil** - `len(self.products) + 1` genera race conditions
-6. ❌ **Respuestas Inconsistentes** - Mezcla de `message` y `error`
-7. ❌ **Sin Abstracción** - Acceso directo a datos
+1.  **Acoplamiento Fuerte** - Crea instancias de BD directamente
+2.  **Lógica Mixta** - Filtraje y búsqueda en controlador
+3.  **Autenticación Quemada** - Token hardcoded (`'abcd1234'`)
+4.  **Sin Validación** - Aceptar datos sin validar
+5.  **Respuestas Inconsistentes** - Mezcla de `message` y `error`
+6.  **Sin Abstracción** - Acceso directo a datos
 
 ---
 
-#### ✅ DESPUÉS - ProductsController (Limpio y Profesional)
+####  DESPUÉS - ProductsController (Limpio y Profesional)
 ```python
 from flask import Blueprint, request, jsonify
 from werkzeug.exceptions import HTTPException
@@ -223,7 +203,7 @@ from src.interfaces.services.products_service_interface import IProductsService
 
 
 products_bp = Blueprint("products", __name__)
-# ✅ INYECCIÓN DE DEPENDENCIA
+#  INYECCIÓN DE DEPENDENCIA
 products_service: IProductsService = None
 
 
@@ -243,41 +223,18 @@ def get_products():
     """
     try:
         category = request.args.get("category") 
-        # ✅ DELEGA AL SERVICIO
+        #  DELEGA AL SERVICIO
         all_products = products_service.get_all(category_filter=category)
         return jsonify(all_products), 200
     
-    # ✅ MANEJO DE ERRORES HTTP CONSISTENTE
+    # MANEJO DE ERRORES HTTP CONSISTENTE
     except HTTPException as e:
         return jsonify({"error": e.description}), e.code
     except Exception as e:
         print(f"Error: {e}")
         return jsonify({"error": "Internal server error"}), 500
-
-
-@products_bp.get("/<int:product_id>")
-def get_product_by_id(product_id):
-    """
-    Retrieve a single product by its ID.
-
-    Args:
-        product_id: The product identifier
-
-    Returns:
-        JSON response with product data and HTTP status code
-    """
-    try:
-        # ✅ SERVICIO 
-        product = products_service.get_one_by_id(product_id=product_id)
-        return jsonify(product), 200
-    
-    except HTTPException as e:
-        return jsonify({"error": e.description}), e.code
-    except Exception as e:
-        print(f"Error: {e}")
-        return jsonify({"error": "Internal server error"}), 500
-
-
+ 
+ ...
 
 @products_bp.post("/")
 def create_product():
@@ -289,7 +246,7 @@ def create_product():
     """
     try:
         request_payload = request.get_json()
-        # ✅ VALIDACIÓN CENTRALIZADA CON DTO
+        #  VALIDACIÓN CENTRALIZADA CON DTO
         dto = ProductCreateDTO(**request_payload) 
         new_product = products_service.create_one(dto)
         return jsonify(new_product), 201
@@ -303,18 +260,18 @@ def create_product():
 ```
 
 **Mejoras Implementadas:**
-1. ✅ **Desacoplamiento Total** - Usa interfaz inyectada
-2. ✅ **Responsabilidad Única** - Solo recibe y envía HTTP
-4. ✅ **Validación Centralizada** - DTOs validan entrada
-5. ✅ **Manejo de Errores Consistente** - HTTPException
-6. ✅ **Respuestas Consistentes** - Siempre JSON estructurado
-7. ✅ **Testeable** - Fácil hacer mocks
+1. **Desacoplamiento Total** - Usa interfaz inyectada
+2. **Responsabilidad Única** - Solo recibe y envía HTTP
+4. **Validación Centralizada** - DTOs validan entrada
+5. **Manejo de Errores Consistente** - HTTPException
+6. **Respuestas Consistentes** - Siempre JSON estructurado
+7. **Testeable** - Fácil hacer mocks
 
 ---
 
-### 3️⃣ BASE DE DATOS (SINGLETON)
+###  BASE DE DATOS (SINGLETON)
 
-#### ❌ ANTES - Sin Thread Safety
+####  ANTES - Sin Thread Safety
 ```python
 import json
 
@@ -338,7 +295,7 @@ class DatabaseConnection:
             return []
 
     def add_product(self, new_product):
-        # ❌ PROBLEMA: Sin sincronización con BD
+        #  PROBLEMA: Sin sincronización con BD
         if self.data:
             products = self.data.get('products', [])
             products.append(new_product)
@@ -348,14 +305,14 @@ class DatabaseConnection:
 ```
 
 **Problemas:**
-- ❌ Sin Singleton - Múltiples instancias
-- ❌ Sin thread safety
-- ❌ Métodos específicos (get_products) en lugar de genéricos
-- ❌ Sin interfaz
+- Sin Singleton - Múltiples instancias
+-  Sin thread safety
+-  Métodos específicos (get_products) en lugar de genéricos
+-  Sin interfaz
 
 ---
 
-#### ✅ DESPUÉS - Singleton Thread-Safe
+####  DESPUÉS - Singleton Thread-Safe
 ```python
 class DatabaseConnection(IDatabaseConnection):
     _instance = None
@@ -387,38 +344,38 @@ class DatabaseConnection(IDatabaseConnection):
 ```
 
 **Mejoras Implementadas:**
-1. ✅ **Patrón Singleton** - Una única instancia evitando multiples conexion a la db
-2. ✅ **Thread-Safe** - Double-checked locking con mutex
-3. ✅ **Interfaz Explícita** - Implementa IDatabaseConnection
+1.  **Patrón Singleton** - Una única instancia evitando multiples conexion a la db
+2.  **Thread-Safe** - Double-checked locking con mutex
+3.  **Interfaz Explícita** - Implementa IDatabaseConnection
 ---
 
-## 🎯 CODE SMELLS IDENTIFICADOS
+##  CODE SMELLS IDENTIFICADOS
 
 ### Smell #1: GOD OBJECT (ProductsResource)
 
-**Severidad:** 🔴 CRÍTICA
+**Severidad:**  CRÍTICA
 
 ```python
-# ❌ ANTES: Una clase hace TODO
+#  ANTES: Una clase hace TODO
 class ProductsResource(Resource):
     def __init__(self):
-        self.db = DatabaseConnection('db.json')  # ❌ Gestiona BD
+        self.db = DatabaseConnection('db.json')  #  Gestiona BD
         self.db.connect()
-        self.products = self.db.get_products()    # ❌ Carga datos
-        self.parser = reqparse.RequestParser()    # ❌ Valida entrada
+        self.products = self.db.get_products()    #  Carga datos
+        self.parser = reqparse.RequestParser()    #  Valida entrada
         
     def get(self, product_id=None):
-        # ❌ Valida autenticación
-        # ❌ Filtra productos
-        # ❌ Busca por ID
-        # ❌ Retorna respuestas HTTP
+        #  Valida autenticación
+        #  Filtra productos
+        #  Busca por ID
+        #  Retorna respuestas HTTP
         pass
     
     def post(self):
-        # ❌ Valida autenticación
-        # ❌ Genera IDs
-        # ❌ Valida entrada
-        # ❌ Persiste datos
+        #  Valida autenticación
+        #  Genera IDs
+        #  Valida entrada
+        #  Persiste datos
         pass
 ```
 
@@ -431,7 +388,7 @@ class ProductsResource(Resource):
 **Solución:**
 
 ```python
-# ✅ DESPUÉS: Separación de responsabilidades
+#  DESPUÉS: Separación de responsabilidades
 
 # Controlador: Solo HTTP
 @products_bp.get("/")
@@ -463,18 +420,18 @@ class DatabaseConnection(IDatabaseConnection):
         self.data = json.load(file)
 ```
 
-**Beneficio:** Cada componente tiene una responsabilidad clara ✅
+**Beneficio:** Cada componente tiene una responsabilidad clara 
 
 ---
 
 ### Smell #2: MAGIC NUMBERS (ID Generation)
 
-**Severidad:** 🟠 ALTA
+**Severidad:**  ALTA
 
 ```python
-# ❌ ANTES: Frágil y con race conditions
+#  ANTES: Frágil y con race conditions
 new_product = {
-    'id': len(self.products) + 1,  # ❌ ¿Qué si dos requests simultáneos?
+    'id': len(self.products) + 1,  #  ¿Qué si dos requests simultáneos?
     'name': args['name'],
     'category': args['category'],
     'price': args['price']
@@ -489,7 +446,7 @@ new_product = {
 **Solución:**
 
 ```python
-# ✅ DESPUÉS: Generación segura y centralizada
+#  DESPUÉS: Generación segura y centralizada
 def add_one(self, product: Product) -> Product:
     if self.db.data:
         products = self.db.data.get('products', [])
@@ -507,22 +464,21 @@ def add_one(self, product: Product) -> Product:
         
         products.append(product_dict)
         self.db.data['products'] = products
-        self.db.save_data(self.db.data)  # ✅ Persistencia atómica
         
         return product
 ```
 
-**Beneficio:** IDs seguros y predecibles ✅
+**Beneficio:** IDs seguros y predecibles 
 
 ---
 
-### Smell #3: MISSING VALIDATION
+### Smell : MISSING VALIDATION
 
 No se tenia una diferencia entre los valores de entrada y salida con entidades de negocio, por ende se agregaron dtos para hacer la distincion entre objetos.
-**Severidad:** 🔴 CRÍTICA
+**Severidad:**  CRÍTICA
 
 ```python
-# ❌ ANTES: Sin validación de entrada
+#  ANTES: Sin validación de entrada
 def post(self):
     args = parser.parse_args()
     new_product = {
@@ -542,7 +498,7 @@ def post(self):
 **Solución:**
 
 ```python
-# ✅ DESPUÉS: Validación con DTOs
+#  DESPUÉS: Validación con DTOs
 from pydantic import BaseModel, Field
 
 class ProductCreateDTO(BaseModel):
@@ -561,7 +517,7 @@ def create_product():
         validate_token()
         request_payload = request.get_json()
         
-        # ✅ Validación automática
+        #  Validación automática
         dto = ProductCreateDTO(**request_payload)
         
         new_product = products_service.create_one(dto)
@@ -571,13 +527,13 @@ def create_product():
         return jsonify({"error": e.errors()}), 400
 ```
 
-**Beneficio:** Datos garantizados como válidos ✅
+**Beneficio:** Datos garantizados como válidos 
 
 
 ### Smell #4: CONSTANTS
 
 Se implemento el uso de variables para mejorar la consistencia en casa uno de los endpoints
-**Severidad:** 🔴 BAJA
+**Severidad:**  BAJA
 
 
 ```python
@@ -605,10 +561,10 @@ CATEGORIES = "categories"
 PRODUCTS = "products"
 ```
 
-**Beneficio:** En caso de algun cambio solo tenemos que modificar el archivo de variables ✅
+**Beneficio:** En caso de algun cambio solo tenemos que modificar el archivo de variables 
 ---
 
-## 🏗️ PATRONES DE DISEÑO IMPLEMENTADOS
+##  PATRONES DE DISEÑO IMPLEMENTADOS
 
 ### 1. PATRÓN SINGLETON (Conexión a BD)
 
@@ -629,7 +585,7 @@ class DatabaseConnection(IDatabaseConnection):
 # Uso: Siempre la misma instancia
 db1 = DatabaseConnection('db.json')
 db2 = DatabaseConnection('db.json')
-assert db1 is db2  # ✅ Mismo objeto
+assert db1 is db2  #  Mismo objeto
 ```
 
 **Beneficios:**
@@ -653,7 +609,7 @@ class Product:
     
     def set_id(self, id: int) -> 'Product':
         self.id = id
-        return self  # ✅ Retorna self para encadenamiento
+        return self  #  Retorna self para encadenamiento
     
     def set_name(self, name: str) -> 'Product':
         self.name = name
@@ -685,7 +641,7 @@ product = (Product()
     .set_name("Laptop")
     .set_category("Electronics")
     .set_price(999.99)
-    .build())  # ✅ Validación automática
+    .build())  #  Validación automática
 ```
 
 **Beneficios:**
@@ -705,7 +661,7 @@ product = (Product()
 - Lógica de consulta centralizada
 
 
-## 🏛️ ARQUITECTURA DE CAPAS
+##  ARQUITECTURA DE CAPAS
 
 ### Diagrama Conceptual
 
@@ -763,7 +719,7 @@ product = (Product()
 
 ---
 
-## ⚖️ DECISIONES TÉCNICAS JUSTIFICADAS
+##  DECISIONES TÉCNICAS JUSTIFICADAS
 
 ### 1. ¿Por qué map() nativa en lugar de list comprehension?
 
@@ -777,21 +733,21 @@ products = [ProductsMapper.map_raw_data_to_product(p) for p in raw_products]
 ```
 
 **Decisión:** map() porque:
-- ✅ Es funcional y declarativa
-- ✅ Más eficiente para muchos datos
-- ✅ Expresa claramente la transformación
-- ✅ Estándar en programación funcional
+-  Es funcional y declarativa
+-  Más eficiente para muchos datos
+-  Expresa claramente la transformación
+-  Estándar en programación funcional
 
 ---
 
 ### 2. ¿Por qué Werkzeug.exceptions en lugar de Flask.abort?
 
 ```python
-# ❌ No recomendado
+#  No recomendado
 from os import abort
 abort(404, description="Not found")
 
-# ✅ Recomendado
+#  Recomendado
 from werkzeug.exceptions import NotFound
 raise NotFound("Product not found")
 ```
@@ -812,10 +768,10 @@ class ProductCreateDTO(BaseModel):
 ```
 
 **Beneficios:**
-- ✅ Validación automática y declarativa
-- ✅ Mensajes de error detallados
-- ✅ Type hints integrados
-- ✅ Documentación automática
+-  Validación automática y declarativa
+-  Mensajes de error detallados
+-  Type hints integrados
+-  Documentación automática
 
 ---
 
@@ -829,10 +785,10 @@ assert db1 is db2  # Mismo objeto
 ```
 
 **Razones:**
-- ✅ Una única conexión a BD
-- ✅ Control centralizado
-- ✅ Menor uso de memoria
-- ✅ Thread-safe
+-  Una única conexión a BD
+-  Control centralizado
+-  Menor uso de memoria
+-  Thread-safe
 
 ---
 
@@ -850,17 +806,17 @@ class IProductsRepository(ABC):
 ```
 
 **Razones:**
-- ✅ Contrato explícito
-- ✅ Verificación de cumplimiento
-- ✅ Mejor autocompletado
-- ✅ Documentación clara
+-  Contrato explícito
+-  Verificación de cumplimiento
+-  Mejor autocompletado
+-  Documentación clara
 
 ---
-## 🎓 PRINCIPIOS SOLID APLICADOS
+##  PRINCIPIOS SOLID APLICADOS
 
 ### S - Single Responsibility Principle
 ```python
-# ✅ Cada clase tiene UNA responsabilidad
+#  Cada clase tiene UNA responsabilidad
 ProductsController      # Solo HTTP
 ProductsService         # Solo lógica de negocio
 ProductsRepository      # Solo acceso a datos
@@ -869,7 +825,7 @@ DatabaseConnection      # Solo conexión a BD
 
 ### O - Open/Closed Principle
 ```python
-# ✅ Abierto para extensión, cerrado para modificación
+#  Abierto para extensión, cerrado para modificación
 class IProductsService(ABC):
     pass
 
@@ -882,7 +838,7 @@ class CachedProductsService(IProductsService):  # Extensión sin modificar
 
 ### L - Liskov Substitution Principle
 ```python
-# ✅ Las subclases pueden sustituir a la clase base
+#  Las subclases pueden sustituir a la clase base
 def use_service(service: IProductsService):
     return service.get_all()
 
@@ -896,7 +852,7 @@ use_service(service2)
 
 ### I - Interface Segregation Principle
 ```python
-# ✅ Interfaces específicas, no genéricas
+#  Interfaces específicas, no genéricas
 class IProductsService(ABC):
     def get_all(self) -> List[dict]: pass
     def get_one_by_id(self, id: int) -> dict: pass
@@ -907,18 +863,18 @@ class IProductsService(ABC):
 
 ### D - Dependency Inversion Principle
 ```python
-# ✅ Depende de abstracciones, no de implementaciones concretas
+#  Depende de abstracciones, no de implementaciones concretas
 class ProductsService:
-    def __init__(self, repo: IProductsRepository):  # ✅ Interfaz
+    def __init__(self, repo: IProductsRepository):  #  Interfaz
         self.db = repo
 
 # En lugar de:
-# def __init__(self, repo: ProductsRepository):  # ❌ Implementación
+# def __init__(self, repo: ProductsRepository):  #  Implementación
 ```
 
 ---
 
-## 🔐 VALIDACIÓN DE INTEGRIDAD REFERENCIAL
+##  VALIDACIÓN DE INTEGRIDAD REFERENCIAL
 
 ### Mejora: Validación de categorías antes de persistir
 
@@ -953,7 +909,7 @@ def add_one(self, product: Product) -> Product:
 
 ---
 
-## 🚀 CONCLUSIÓN
+##  CONCLUSIÓN
 
 Esta refactorización transforma una arquitectura desorganizada en una estructura profesional, escalable y mantenible mediante:
 
@@ -968,16 +924,16 @@ Esta refactorización transforma una arquitectura desorganizada en una estructur
 9. **Estructura escalable** - Patrón replicable para nuevos módulos (Products, Categories, etc.)
 
 El resultado es código:
-- ✅ Más mantenible
-- ✅ Más testeable
-- ✅ Más reutilizable
-- ✅ Más escalable
-- ✅ Más profesional
-- ✅ Con datos consistentes y seguros
-- ✅ Type-safe con constantes centralizadas
+-  Más mantenible
+-  Más testeable
+-  Más reutilizable
+-  Más escalable
+-  Más profesional
+-  Con datos consistentes y seguros
+-  Type-safe con constantes centralizadas
 
 ---
 
 **Documento compilado:** 30 de Noviembre de 2025  
 **Estado:** COMPLETO Y VERIFICADO  
-**Versión:** 2.2 (Con constantes y estructura multi-módulo)
+**Versión:** 2.2 
